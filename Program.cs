@@ -107,7 +107,7 @@ namespace HMS.error
 
 
                     case 1: // Register New Patient
-                        lastIndex++;
+                        
 
                         Console.Write("Patient Name: ");
                         patientNames[lastIndex] = Console.ReadLine();
@@ -122,13 +122,18 @@ namespace HMS.error
                         departments[lastIndex] = Console.ReadLine();
 
 
-                        patientIDs[lastIndex] = "P00" + lastIndex;
+                        
+                        string patientId = string.Format("P{0:D3}", lastIndex);
+                        patientIDs[lastIndex] = patientId;
                         admitted[lastIndex] = false;
                         assignedDoctors[lastIndex] = "";
                         visitCount[lastIndex] = 0;
                         billingAmount[lastIndex] = 0;
+                       
 
                         Console.WriteLine("Patient registered successfully with ID :" + patientIDs[lastIndex]);
+
+                        lastIndex++;
                         break;
 
                     case 2: // Admit Patient
@@ -154,10 +159,16 @@ namespace HMS.error
 
                                     Console.WriteLine("Patient admitted successfully and assigned to " + assignedDoctors[i]);
 
-                                    if (visitCount[i] > 1)
-                                        Console.WriteLine("This patient has been admitted " + visitCount[i] + " times");
+                                    visitCount[lastIndex]++;  
+
+                                    if (visitCount[lastIndex] == 1)
+                                    {
+                                        Console.WriteLine("Patient has been admitted for the first time.");
+                                    }
                                     else
-                                        Console.WriteLine("this is first time");
+                                    {
+                                        Console.WriteLine("Patient has been admitted " + visitCount[lastIndex] + " times.");
+                                    }
                                 }
                                 else
                                 {
