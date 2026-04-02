@@ -19,8 +19,8 @@ namespace HMS.error
             string[] departments = new string[100];
             int[] visitCount = new int[100];
             double[] billingAmount = new double[100];
-            DateTime[] lastVisitDate = new DateTime[100];
-            DateTime[]lastDischargeDate=new DateTime[100];
+            string[] lastVisitDate = new string[100];
+            string[]lastDischargeDate=new string[100];
             int[]daysInHospital=new int[100];
             string[]bloodType=new string[100];
 
@@ -43,9 +43,10 @@ namespace HMS.error
             assignedDoctors[lastIndex] = "";
             visitCount[lastIndex] = 2;
             billingAmount[lastIndex] = 0;
-            lastVisitDate[lastIndex] = DateTime.Parse("2025-01-10");
-            lastDischargeDate[lastIndex] = DateTime.Parse("2025 - 01 - 15");
+            lastVisitDate[lastIndex] = "2025-01-10";
+            lastDischargeDate[lastIndex] = "2025 - 01 - 15";
             daysInHospital[lastIndex] = 12;
+            bloodType[lastIndex] = "A+";
 
 
 
@@ -59,9 +60,10 @@ namespace HMS.error
             assignedDoctors[lastIndex] = "Dr. Noor";
             visitCount[lastIndex] = 4;
             billingAmount[lastIndex] = 0;
-            lastVisitDate[lastIndex] = DateTime.Parse("2025-03-02");
-            lastDischargeDate[lastIndex] = DateTime.Parse("2025 - 01 - 15");
+            lastVisitDate[lastIndex] = "2025-03-02";
+            lastDischargeDate[lastIndex] = "2025 - 01 - 15";
             daysInHospital[lastIndex] = 8;
+            bloodType[lastIndex] = "O-";
 
             lastIndex++;
 
@@ -73,9 +75,10 @@ namespace HMS.error
             assignedDoctors[lastIndex] = "";
             visitCount[lastIndex] = 1;
             billingAmount[lastIndex] = 0;
-            lastVisitDate[lastIndex] = DateTime.Parse("");
-            lastDischargeDate[lastIndex] = DateTime.Parse("2024-12-28");
+            lastVisitDate[lastIndex] = "";
+            lastDischargeDate[lastIndex] = "2024-12-28";
             daysInHospital[lastIndex]=5;
+            bloodType[lastIndex] = "B+";
             ////////////////////////////////////////////////////////////////////
 
 
@@ -119,7 +122,7 @@ namespace HMS.error
 
 
                     case 1: // Register New Patient
-                        
+
 
                         Console.Write("Patient Name: ");
                         patientNames[lastIndex] = Console.ReadLine();
@@ -134,14 +137,18 @@ namespace HMS.error
                         departments[lastIndex] = Console.ReadLine();
 
 
-                        
+
                         string patientId = string.Format("P{0:D3}", lastIndex);
                         patientIDs[lastIndex] = patientId;
                         admitted[lastIndex] = false;
                         assignedDoctors[lastIndex] = "";
                         visitCount[lastIndex] = 0;
                         billingAmount[lastIndex] = 0;
-                       
+                        Console.Write("blood Type: ");
+                        bloodType[lastIndex] = Console.ReadLine();
+                        lastVisitDate[lastIndex] = "";
+                        lastDischargeDate[lastIndex] = "";
+                        daysInHospital[lastIndex] = 0;
 
                         Console.WriteLine("Patient registered successfully with ID :" + patientIDs[lastIndex]);
 
@@ -151,6 +158,8 @@ namespace HMS.error
                     case 2: // Admit Patient
                         Console.Write("Enter Patient ID or Name: ");
                         string admitInput = Console.ReadLine();
+                        Console.Write("Enter the admittion date: ");
+                        string admittiondate = Console.ReadLine();
 
                         bool admitFound = false;
 
@@ -167,19 +176,24 @@ namespace HMS.error
 
                                     admitted[i] = true;
                                     visitCount[i]++;
-                                    lastVisitDate[i] = DateTime.Now;
+
+                                    Console.Write("Enter admission date (YYYY-MM-DD): ");
+                                    lastVisitDate[i] = Console.ReadLine();
+
+                                    lastVisitDate[i] = "";
+
+                                    lastDischargeDate[i] = ""; 
 
                                     Console.WriteLine("Patient admitted successfully and assigned to " + assignedDoctors[i]);
+                                    Console.WriteLine("Recorded admission date: " + "");
 
-                                    visitCount[lastIndex]++;  
-
-                                    if (visitCount[lastIndex] == 1)
+                                    if (visitCount[i] == 1)
                                     {
                                         Console.WriteLine("Patient has been admitted for the first time.");
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Patient has been admitted " + visitCount[lastIndex] + " times.");
+                                        Console.WriteLine("Patient has been admitted " + visitCount[i] + " times.");
                                     }
                                 }
                                 else
@@ -190,6 +204,7 @@ namespace HMS.error
                                 break;
                             }
                         }
+                
 
                         if (admitFound == false)
                         {
@@ -310,14 +325,10 @@ namespace HMS.error
                         Console.Write("Enter Patient ID or Name: ");
                         string searchInput = Console.ReadLine();
 
-
                         bool pateintFound = false;
-
 
                         for (int i = 0; i <= lastIndex; i++)
                         {
-
-
                             if (patientNames[i] == searchInput || patientIDs[i] == searchInput)
                             {
                                 pateintFound = true;
@@ -328,7 +339,37 @@ namespace HMS.error
                                 Console.WriteLine("Department:     " + departments[i]);
                                 Console.WriteLine("Admitted:       " + admitted[i]);
                                 Console.WriteLine("Total Visits:   " + visitCount[i]);
+
+                                
+                                Console.WriteLine("Blood Type:     " + bloodType[i]);
+
+                               
                                 Console.WriteLine("Total Billing:  " + billingAmount[i] + " OMR");
+
+                               
+                                string lastvisit;
+                                if (lastVisitDate[i]==null)
+                                {
+                                    Console.WriteLine("Last Visit Date: No admission recorded");
+                                }
+                                    
+                                else
+
+                                {
+                                    lastvisit= lastVisitDate[i];
+
+
+                                }
+                                    Console.WriteLine("Last Visit Date: " + lastVisitDate[i]);
+
+                                string discharge;
+                                if (lastDischargeDate[i] == null)
+                                    Console.WriteLine("Last Discharge Date: Still admitted");
+                                else
+                                    Console.WriteLine("Last Discharge Date: " + lastDischargeDate[i]);
+
+                             
+                                Console.WriteLine("Total Days in Hospital: " + daysInHospital[i]);
 
                                 if (admitted[i])
                                 {
@@ -341,8 +382,6 @@ namespace HMS.error
                                 Console.WriteLine("----------------------------------------");
                                 break;
                             }
-
-
                         }
 
                         if (pateintFound == false)
@@ -351,8 +390,6 @@ namespace HMS.error
                         }
 
                         break;
-
-
 
 
 
@@ -369,7 +406,7 @@ namespace HMS.error
                             if (admitted[i] == true)
                                 
                             {
-                                Console.WriteLine("Name: " + patientNames[i] + " | ID: " + patientIDs[i] + " | Diagnosis: " + diagnoses[i] + " | Department: " + departments[i] + " | Doctor: " + assignedDoctors[i]);
+                                Console.WriteLine("Name: " + patientNames[i] + " | ID: " + patientIDs[i] + " | Diagnosis: " + diagnoses[i] + " | Department: " + departments[i] + " | Doctor: " + assignedDoctors[i] + " + lastVisitDate[i] Admitted Since: " + lastVisitDate[i] );
                                 hasAdmitted = true;
                                 admittedCount++;
 
@@ -408,6 +445,7 @@ namespace HMS.error
                                 doctorFound = true;
                                 assignedDoctors[i] = newDoctor;
                                 Console.WriteLine("Patient '" + patientNames[i] + "' has been transferred to " + newDoctor);
+                                Console.WriteLine("Patient last admitted on: " + lastVisitDate[i]);
                                 break;
                             }
                         }
@@ -475,7 +513,7 @@ namespace HMS.error
                                 //    stat = "not admitted";
 
 
-                                Console.WriteLine("ID: " + patientIDs[i] + " | Name: " + patientNames[i] + " | Diagnosis: " + diagnoses[i] + " | Status: " + status);
+                                Console.WriteLine("ID: " + patientIDs[i] + " | Name: " + patientNames[i] + " | Diagnosis: " + diagnoses[i] + " | Status: " + status +"| Blood Type: " + bloodType[i]);
                             }
                         }
 
@@ -526,6 +564,8 @@ namespace HMS.error
                                     billingFound = true;
                                     Console.WriteLine("----------------------------------------");
                                     Console.WriteLine("Billing for " + patientNames[i] + ": " + billingAmount[i] + " OMR");
+                                    Console.WriteLine("Last Visit Date: " + lastVisitDate[i]);
+                                    Console.WriteLine("Total Days: " + daysInHospital[i]);
                                     break;
                                 }
                             }
