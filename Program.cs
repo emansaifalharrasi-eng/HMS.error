@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.Metrics;
 using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HMS.error
@@ -18,9 +19,10 @@ namespace HMS.error
             string[] departments = new string[100];
             int[] visitCount = new int[100];
             double[] billingAmount = new double[100];
-
-
             DateTime[] lastVisitDate = new DateTime[100];
+            DateTime[]lastDischargeDate=new DateTime[100];
+            int[]daysInHospital=new int[100];
+            string[]bloodType=new string[100];
 
 
             // Patient[] patients = new Patient[100];
@@ -41,7 +43,11 @@ namespace HMS.error
             assignedDoctors[lastIndex] = "";
             visitCount[lastIndex] = 2;
             billingAmount[lastIndex] = 0;
-            lastVisitDate[lastIndex] = DateTime.Today;
+            lastVisitDate[lastIndex] = DateTime.Parse("2025-01-10");
+            lastDischargeDate[lastIndex] = DateTime.Parse("2025 - 01 - 15");
+            daysInHospital[lastIndex] = 12;
+
+
 
             lastIndex++;
 
@@ -53,6 +59,9 @@ namespace HMS.error
             assignedDoctors[lastIndex] = "Dr. Noor";
             visitCount[lastIndex] = 4;
             billingAmount[lastIndex] = 0;
+            lastVisitDate[lastIndex] = DateTime.Parse("2025-03-02");
+            lastDischargeDate[lastIndex] = DateTime.Parse("2025 - 01 - 15");
+            daysInHospital[lastIndex] = 8;
 
             lastIndex++;
 
@@ -64,6 +73,9 @@ namespace HMS.error
             assignedDoctors[lastIndex] = "";
             visitCount[lastIndex] = 1;
             billingAmount[lastIndex] = 0;
+            lastVisitDate[lastIndex] = DateTime.Parse("");
+            lastDischargeDate[lastIndex] = DateTime.Parse("2024-12-28");
+            daysInHospital[lastIndex]=5;
             ////////////////////////////////////////////////////////////////////
 
 
@@ -317,7 +329,15 @@ namespace HMS.error
                                 Console.WriteLine("Admitted:       " + admitted[i]);
                                 Console.WriteLine("Total Visits:   " + visitCount[i]);
                                 Console.WriteLine("Total Billing:  " + billingAmount[i] + " OMR");
-                                Console.WriteLine("Doctor:         " + assignedDoctors[i]);
+
+                                if (admitted[i])
+                                {
+                                    Console.WriteLine("Doctor:         " + assignedDoctors[i]);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Patient is not currently admitted, so no doctor is assigned.");
+                                }
                                 Console.WriteLine("----------------------------------------");
                                 break;
                             }
@@ -342,20 +362,29 @@ namespace HMS.error
                         Console.WriteLine("----------------------------------------");
 
                         bool hasAdmitted = false;
+                        int admittedCount = 0;
 
                         for (int i = 0; i <= lastIndex; i++)
                         {
                             if (admitted[i] == true)
+                                
                             {
                                 Console.WriteLine("Name: " + patientNames[i] + " | ID: " + patientIDs[i] + " | Diagnosis: " + diagnoses[i] + " | Department: " + departments[i] + " | Doctor: " + assignedDoctors[i]);
                                 hasAdmitted = true;
+                                admittedCount++;
+
+                                if (hasAdmitted == false)
+                                {
+                                    Console.WriteLine("No patients currently admitted");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Total admitted patients found: " + admittedCount);
+                                }
                             }
                         }
 
-                        if (hasAdmitted == false)
-                        {
-                            Console.WriteLine("No patients currently admitted");
-                        }
+
 
                         break;
 
@@ -366,6 +395,10 @@ namespace HMS.error
                         Console.Write("Enter new doctor name: ");
                         string newDoctor = Console.ReadLine();
 
+                        if (currentDoctor == newDoctor)
+                            Console.WriteLine("The new doctor must be different than current doctor");
+
+
                         bool doctorFound = false;
 
                         for (int i = 0; i <= lastIndex; i++)
@@ -375,6 +408,7 @@ namespace HMS.error
                                 doctorFound = true;
                                 assignedDoctors[i] = newDoctor;
                                 Console.WriteLine("Patient '" + patientNames[i] + "' has been transferred to " + newDoctor);
+                                break;
                             }
                         }
 
@@ -427,7 +461,7 @@ namespace HMS.error
 
                         for (int i = 0; i <= lastIndex; i++)
                         {
-                            if (departments[i].ToLower() == searchDept.ToLower())
+                            if (departments[i].IndexOf(searchDept, StringComparison.OrdinalIgnoreCase) >= 0)//here we can use part of name no need to enter the full of the deparment
                             {
                                 deptFound = true;
 
@@ -505,10 +539,22 @@ namespace HMS.error
                         break;
 
                     case 10: // Exit
-                        Console.WriteLine("Exiting system...");
-                        Console.WriteLine("Thank you for using the Healthcare Management System!");
-                        Console.WriteLine("----------------------------------------");
-                        exit = true;
+                        Console.WriteLine("Are you sure you want to exit:(true/false)");
+                            string Confirm = Console.ReadLine().ToLower();
+                        if(Confirm=="true")
+                        {
+
+                            Console.WriteLine("Exiting system...");
+                            Console.WriteLine("Thank you for using the Healthcare Management System!");
+                            Console.WriteLine("----------------------------------------");
+                            exit = true;
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("Returning to menu");
+                        }
+
                         break;
 
                     default:
