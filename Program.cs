@@ -180,7 +180,7 @@ namespace HMS.error
                                     Console.Write("Enter admission date (YYYY-MM-DD): ");
                                     lastVisitDate[i] = Console.ReadLine();
 
-                                    lastVisitDate[i] = "";
+                                    
 
                                     lastDischargeDate[i] = ""; 
 
@@ -228,6 +228,25 @@ namespace HMS.error
                                 if (admitted[i] == true)
                                 {
                                     double visitCharges = 0;
+
+                                    if (visitCharges > 0)
+                                    {
+                                        Console.WriteLine("Total charges added this visit: " + visitCharges + " OMR");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("No charges recorded for this visit");
+                                    }
+
+                                    Console.Write("Enter discharge date (YYYY-MM-DD): ");
+                                    string dischargeDate = Console.ReadLine();
+                                    lastDischargeDate[i] = dischargeDate;   
+                                    Console.Write("Enter number of days spent in hospital: ");
+                                    int daysThisVisit = int.Parse(Console.ReadLine());
+                                    daysInHospital[i] += daysThisVisit;     
+
+                                    Console.WriteLine("Updated total days in hospital: " + daysInHospital[i]);
+
 
                                     Console.Write("Was there a consultation fee? (yes/no): ");
                                     string hasFee = Console.ReadLine().ToLower();
