@@ -239,6 +239,8 @@ namespace HMS.error
 
                                     if (visitCharges > 0)
                                     {
+                                        billingAmount[i] += visitCharges;
+                                        Console.WriteLine("Patient's running total: " + Math.Round(billingAmount[i], 2) + " OMR");
                                         Console.WriteLine("Total charges added this visit: "+ Math.Round(visitCharges,2));
                                     }
                                     else
@@ -584,7 +586,7 @@ namespace HMS.error
                         break;
 
                     case 9: // Billing Report
-                        //part1:
+                        //part1:system-wide total
                         Console.WriteLine("Billing Report:");
                         Console.WriteLine("1. System-wide total");
                         Console.WriteLine("2. Individual patient");
@@ -615,7 +617,7 @@ namespace HMS.error
                         else if (billingOption == 2)
                         {
 
-                            //part2:
+                            //part2:individual system
 
                             Console.Write("Enter Patient ID or Name: ");
                             string billingInput = Console.ReadLine();
@@ -626,7 +628,7 @@ namespace HMS.error
 
                             for (int i = 0; i <= lastIndex; i++)
                             {
-                                totalBilling += billingAmount[i];
+                                billingInput += billingAmount[i];
 
                                 if (billingAmount[i] > 0)
                                 {
@@ -640,6 +642,16 @@ namespace HMS.error
                                     Console.WriteLine("Billing for " + Math.Round(billingAmount[i], 2) + " OMR");
                                     Console.WriteLine("Last Visit Date: " + lastVisitDate[i]);
                                     Console.WriteLine("Total Days: " + daysInHospital[i]);
+                                    Random random = new Random();
+                                    int discountPercentage = random.Next(5, 21); 
+                                    double discountValue = (billingAmount[i] * discountPercentage) / 100;
+                                    double finalAmount = billingAmount[i] - discountValue;
+
+                                    finalAmount = Math.Round(finalAmount, 2);
+
+                                    Console.WriteLine($"Discount applied: {discountPercentage}% — Amount after discount: {finalAmount} OMR");
+                                   
+
                                     break;
                                 }
                             }
